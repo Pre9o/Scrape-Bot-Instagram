@@ -8,8 +8,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.chrome.options import Options
 
-driver = webdriver.Chrome()
+# Configurar as opções do Chrome para o modo headless
+chrome_options = Options()
+chrome_options.add_argument("--headless")  # Adicionar a opção headless
+chrome_options.add_argument("--disable-gpu")  # Desativar aceleração de GPU (necessário para o modo headless)
+
+# Inicializar o driver do Chrome com as opções configuradas
+driver = webdriver.Chrome(options=chrome_options)
 
 class Instagram:
     def __init__(self, username, password, username_for_scrape):
@@ -23,113 +30,211 @@ class Instagram:
     def removeFiles(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         
-        input_file_name = "data.json"
-        input_file_path = os.path.join(current_directory, input_file_name)
-        
-        output_file_name = "followers.json"
-        output_file_path = os.path.join(current_directory, output_file_name)
-        
-        output_file_name = "following.json"
-        output_file_path = os.path.join(current_directory, output_file_name)
-        
-        output_file_name = "iDontFollowBack.json"
-        output_file_path = os.path.join(current_directory, output_file_name)
-        
-        output_file_name = "dontFollowMeBack.json"
-        output_file_path = os.path.join(current_directory, output_file_name)
-        
-        if os.path.exists(input_file_path):
-            os.remove(input_file_path)
-        else:
-            print("O arquivo não existe")
-            
-        if os.path.exists(output_file_path):
-            os.remove(output_file_path)
-        else:
-            print("O arquivo não existe")
+        #remover todos os arquvios .json do diretorio
+        for file in os.listdir(current_directory):
+            if file.endswith(".json"):
+                file_path = os.path.join(current_directory, file)
+                os.remove(file_path)
+                
+        for file in os.listdir(current_directory):
+            if file.endswith(".txt"):
+                file_path = os.path.join(current_directory, file)
+                os.remove(file_path)
+             
         
     def selectData(self):     
         current_directory = os.path.dirname(os.path.abspath(__file__))
         
+        script_file_path = os.path.join(current_directory, "script.js")
+        
+        default_file_type = ".json"
+        current_file_type = default_file_type
+        
+        print("Selecione o arquivo que deseja visualizar: ")
+        print("1 - JSON")
+        print("2 - TXT")
+        print("0 - Sair")
+               
+        while True:
+            file_option = int(input("Digite a opção desejada: "))
+            
+            if file_option == 0:
+                break
+            
+            elif file_option == 1:
+                current_file_type = ".json"
+                break
+            
+            elif file_option == 2:
+                current_file_type = ".txt"
+                break
+            
+            else:
+                print("Opção inválida")          
+            
+        
         input_file_name = "data.json"
         input_file_path = os.path.join(current_directory, input_file_name)
-                
-        print("1 - Seguidores")
-        print("2 - Seguindo")
-        print("3 - Não sigo de volta")
-        print("4 - Não me segue de volta")
-        print("5 - Todos os dados")
-        print("0 - Sair")        
-        
-        while True:
-            option = int(input("Digite a opção desejada: "))
-            
-            if option == 0:
-                break
                         
-            elif option == 1:
-                output_file_name = "followers.json"
-                output_file_path = os.path.join(current_directory, output_file_name)
+   
+        if current_file_type == ".json":
+            output_file_name = self.username_for_scrape + "followers.json"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
                 
-                with open(input_file_path, "r", encoding="utf-8") as json_file:
-                    data = json.load(json_file)
-                    
-                followers = data.get('data', {}).get('followers', [])
+            followers = data.get('data', {}).get('followers', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as json_file:
+                json.dump(followers, json_file, indent=2, ensure_ascii=False)
                 
-                with open(output_file_path, "w", encoding="utf-8") as json_file:
-                    json.dump(followers, json_file, indent=2, ensure_ascii=False)
+            print("Arquivo criado com sucesso")
+            
+        elif current_file_type == ".txt":
+            output_file_name = self.username_for_scrape + "followers.txt"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            followers = data.get('data', {}).get('followers', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as txt_file:
+                for follower in followers:
+                    txt_file.write(str(follower) + "\n")
                     
-                print("Arquivo criado com sucesso")
+            print("Arquivo criado com sucesso")
+
+        if current_file_type == ".json":
+            output_file_name = self.username_for_scrape + "followings.json"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            following = data.get('data', {}).get('followings', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as json_file:
+                json.dump(following, json_file, indent=2, ensure_ascii=False)
+                
+            print("Arquivo criado com sucesso")
+            
+        elif current_file_type == ".txt":
+            output_file_name = self.username_for_scrape + "followings.txt"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            following = data.get('data', {}).get('followings', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as txt_file:
+                for follower in following:
+                    txt_file.write(str(follower) + "\n")
+                    
+            print("Arquivo criado com sucesso")
+                    
+        if current_file_type == ".json":
+            output_file_name = self.username_for_scrape + "iDontFollowBack.json"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            i_dont_follow_back = data.get('data', {}).get('iDontFollowBack', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as json_file:
+                json.dump(i_dont_follow_back, json_file, indent=2, ensure_ascii=False)
+                
+            print("Arquivo criado com sucesso")
+            
+        elif current_file_type == ".txt":
+            output_file_name = self.username_for_scrape + "iDontFollowBack.txt"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            i_dont_follow_back = data.get('data', {}).get('iDontFollowBack', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as txt_file:
+                for follower in i_dont_follow_back:
+                    txt_file.write(str(follower) + "\n")
+                    
+            print("Arquivo criado com sucesso")
+                    
+        if current_file_type == ".json":
+            output_file_name = self.username_for_scrape + "dontFollowMeBack.json"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+
+            dont_follow_me_back = data.get('data', {}).get('dontFollowMeBack', [])
+
+            with open(output_file_path, "w", encoding="utf-8") as json_file:
+                json.dump(dont_follow_me_back, json_file, indent=2, ensure_ascii=False)
+                
+            print("Arquivo criado com sucesso")
+            
+        elif current_file_type == ".txt":
+            output_file_name = self.username_for_scrape + "dontFollowMeBack.txt"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            dont_follow_me_back = data.get('data', {}).get('dontFollowMeBack', [])
+            
+            with open(output_file_path, "w", encoding="utf-8") as txt_file:
+                for follower in dont_follow_me_back:
+                    txt_file.write(str(follower) + "\n")
+                    
+            print("Arquivo criado com sucesso")
+                                
+
+        if current_file_type == ".json":
+            print("O arquivo data.json contém todos os dados")
+            
+        elif current_file_type == ".txt":
+            with open (input_file_path, "r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+                
+            #copiar tudo para um txt
+            output_file_name = self.username_for_scrape + "data.txt"
+            output_file_path = os.path.join(current_directory, output_file_name)
+            
+            with open(output_file_path, "w", encoding="utf-8") as txt_file:
+                txt_file.write("Seguidores: \n")
+                for follower in data.get('data', {}).get('followers', []):
+                    txt_file.write(str(follower) + "\n")
+                    
+                txt_file.write("\nSeguindo: \n")
+                for follower in data.get('data', {}).get('following', []):
+                    txt_file.write(str(follower) + "\n")
+                    
+                txt_file.write("\nNão sigo de volta: \n")
+                for follower in data.get('data', {}).get('iDontFollowBack', []):
+                    txt_file.write(str(follower) + "\n")
+                    
+                txt_file.write("\nNão me segue de volta: \n")
+                for follower in data.get('data', {}).get('dontFollowMeBack', []):
+                    txt_file.write(str(follower) + "\n")
+                    
+            os.remove(input_file_path)
+            print("Arquivo criado com sucesso")
+            
         
-            elif option == 2:
-                output_file_name = "following.json"
-                output_file_path = os.path.join(current_directory, output_file_name)
+        
+        with open(script_file_path, "r") as js_file:
+            js_code = js_file.read()
+            js_code = js_code.replace(self.username_for_scrape, "cuardido")
+            
+        with open(script_file_path, "w") as js_file:
+            js_file.write(js_code)          
+        
                 
-                with open(input_file_path, "r", encoding="utf-8") as json_file:
-                    data = json.load(json_file)
-                    
-                following = data.get('data', {}).get('following', [])
-                
-                with open(output_file_path, "w", encoding="utf-8") as json_file:
-                    json.dump(following, json_file, indent=2, ensure_ascii=False)
-                    
-                print("Arquivo criado com sucesso")
-                            
-            elif option == 3:
-                output_file_name = "iDontFollowBack.json"
-                output_file_path = os.path.join(current_directory, output_file_name)
-                
-                with open(input_file_path, "r", encoding="utf-8") as json_file:
-                    data = json.load(json_file)
-                    
-                i_dont_follow_back = data.get('data', {}).get('iDontFollowBack', [])
-                
-                with open(output_file_path, "w", encoding="utf-8") as json_file:
-                    json.dump(i_dont_follow_back, json_file, indent=2, ensure_ascii=False)
-                    
-                print("Arquivo criado com sucesso")
-                
-                            
-            elif option == 4:
-                output_file_name = "dontFollowMeBack.json"
-                output_file_path = os.path.join(current_directory, output_file_name)
-                
-                with open(input_file_path, "r", encoding="utf-8") as json_file:
-                    data = json.load(json_file)
-
-                dont_follow_me_back = data.get('data', {}).get('dontFollowMeBack', [])
-
-                with open(output_file_path, "w", encoding="utf-8") as json_file:
-                    json.dump(dont_follow_me_back, json_file, indent=2, ensure_ascii=False)
-                    
-                print("Arquivo criado com sucesso")
-                                        
-            elif option == 5:
-                print("O arquivo data.json contém todos os dados")
-                
-            else:
-                print("Opção inválida")
-                    
                 
     def moveData(self):
         # Especifique o caminho do arquivo original e o novo caminho de destino
@@ -164,7 +269,7 @@ class Instagram:
 
         self.bot.execute_script(js_code)
         
-        time.sleep(30)
+        time.sleep(100)
 
         #fechar o driver
         self.bot.close()
@@ -219,27 +324,3 @@ def main():
         js_file.write(js_code)
     
 main()
-
-    
-                
-
-
-
-
-
-        
-        
-        
-        
-
-        
-    
-        
-        
-    
-    
-        
-        
-    
-    
-    

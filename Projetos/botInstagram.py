@@ -8,15 +8,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.chrome.options import Options
 
-# Configurar as opções do Chrome para o modo headless
-chrome_options = Options()
-chrome_options.add_argument("--headless")  # Adicionar a opção headless
-chrome_options.add_argument("--disable-gpu")  # Desativar aceleração de GPU (necessário para o modo headless)
-
-# Inicializar o driver do Chrome com as opções configuradas
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome()
 
 class Instagram:
     def __init__(self, username, password, username_for_scrape):
@@ -103,6 +96,7 @@ class Instagram:
             with open(output_file_path, "w", encoding="utf-8") as txt_file:
                 for follower in followers:
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
             print("Arquivo criado com sucesso")
 
@@ -132,6 +126,7 @@ class Instagram:
             with open(output_file_path, "w", encoding="utf-8") as txt_file:
                 for follower in following:
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
             print("Arquivo criado com sucesso")
                     
@@ -161,6 +156,7 @@ class Instagram:
             with open(output_file_path, "w", encoding="utf-8") as txt_file:
                 for follower in i_dont_follow_back:
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
             print("Arquivo criado com sucesso")
                     
@@ -190,6 +186,7 @@ class Instagram:
             with open(output_file_path, "w", encoding="utf-8") as txt_file:
                 for follower in dont_follow_me_back:
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
             print("Arquivo criado com sucesso")
                                 
@@ -209,18 +206,22 @@ class Instagram:
                 txt_file.write("Seguidores: \n")
                 for follower in data.get('data', {}).get('followers', []):
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
                 txt_file.write("\nSeguindo: \n")
                 for follower in data.get('data', {}).get('following', []):
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
                 txt_file.write("\nNão sigo de volta: \n")
                 for follower in data.get('data', {}).get('iDontFollowBack', []):
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
                 txt_file.write("\nNão me segue de volta: \n")
                 for follower in data.get('data', {}).get('dontFollowMeBack', []):
                     txt_file.write(str(follower) + "\n")
+                    txt_file.write("\n")
                     
             os.remove(input_file_path)
             print("Arquivo criado com sucesso")
@@ -269,7 +270,7 @@ class Instagram:
 
         self.bot.execute_script(js_code)
         
-        time.sleep(100)
+        time.sleep(20)
 
         #fechar o driver
         self.bot.close()

@@ -229,7 +229,7 @@ class Instagram:
         print("1 - JSON")
         print("2 - TXT")
         print("0 - Sair")
-               
+
         while True:
             file_option = int(input("Digite a opção desejada: "))
             
@@ -254,6 +254,7 @@ class Instagram:
             if link_option == 1:
                 if file_option == 1:
                     instagram_links_generator = CreateLinksJson(self.username_for_scrape)
+                    instagram_links_generator.__init__(self.username_for_scrape)
                     break
 
                 elif file_option == 2:
@@ -310,7 +311,7 @@ class Instagram:
 
         self.bot.execute_script(js_code)
         
-        time.sleep(10)
+        time.sleep(50)
 
         #fechar o driver
         self.bot.close()
@@ -337,6 +338,23 @@ class Instagram:
         self.scrape()
         
 def main():
+    print("Bem vindo ao bot do Instagram")
+    print("Deseja executar o bot ou apenas deletar os arquivos .json e .txt?")
+    print("1 - Executar o bot / 2 - Deletar os arquivos / 0 - Sair")
+    
+    while True:
+        program_option = int(input("Digite a opção desejada: "))
+        
+        if program_option == 0:
+            break
+        
+        elif program_option == 1:
+            break
+        
+        elif program_option == 2:
+            Instagram.removeFiles(program_option)
+            return
+    
     username = input("Digite seu nome de usuário: ")
     password = getpass.getpass("Digite sua senha: ")
     

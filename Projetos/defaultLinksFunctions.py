@@ -1,7 +1,7 @@
 import json
 import os
 
-def generate_links(self):
+def generate_links_txt(self):
     with open(self.input_file_path, "r", encoding="utf-8") as file_txt:
         lines = file_txt.readlines()
 
@@ -20,10 +20,30 @@ def generate_links(self):
                 temp_file.write(line)
                 temp_file.write("\n")  # Adiciona a linha em branco
 
-def replace_input_file(self):
+def replace_input_file_txt(self):
     os.replace(self.temp_file_path, self.input_file_path)
 
 def create_links_txt(self):
-    generate_links(self)
-    replace_input_file(self)
+    generate_links_txt(self)
+    replace_input_file_txt(self)
+    print("Done")
+    
+    
+    
+    
+def generate_links_json(self):
+    with open(self.input_file_path, "r", encoding="utf-8") as file_json:
+        with open(self.temp_file_path, "w", encoding="utf-8") as temp_file:
+            data = json.load(file_json)
+            for user in data:
+                link = self.base_url + "/" + user["username"]
+                user["link"] = link
+            json.dump(data, temp_file, indent=4)
+                        
+def replace_input_file_json(self):
+    os.replace(self.temp_file_path, self.input_file_path)
+    
+def create_links_json(self):
+    generate_links_json(self)
+    replace_input_file_json(self)
     print("Done")

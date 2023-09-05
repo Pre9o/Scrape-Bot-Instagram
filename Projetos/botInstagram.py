@@ -311,7 +311,7 @@ class Instagram:
 
         self.bot.execute_script(js_code)
         
-        time.sleep(50)
+        time.sleep(20)
 
         #fechar o driver
         self.bot.close()
@@ -354,6 +354,9 @@ def main():
         elif program_option == 2:
             Instagram.removeFiles(program_option)
             return
+        
+        else:
+            print("Opção inválida")
     
     username = input("Digite seu nome de usuário: ")
     password = getpass.getpass("Digite sua senha: ")

@@ -1,4 +1,3 @@
-import json
 import os
 from defaultLinksFunctions import create_links_txt, create_links_json
 

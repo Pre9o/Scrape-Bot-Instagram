@@ -99,6 +99,11 @@ async function fetchData() {
 
             console.log({ iDontFollowBack });
 
+            followers = ordenarPorNome(followers);
+            followings = ordenarPorNome(followings);
+            dontFollowMeBack = ordenarPorNome(dontFollowMeBack);
+            iDontFollowBack = ordenarPorNome(iDontFollowBack);
+
     
             return {
                 followers,
@@ -110,6 +115,20 @@ async function fetchData() {
             console.log({ err });
         }
 }
+
+function ordenarPorNome(array) {
+    return array.sort(function (a, b) {
+        if (a.username > b.username) {
+            return 1;
+        }
+        if (a.username < b.username) {
+            return -1;
+
+        }
+        return 0;
+    });
+}
+
 
 
 // Função para salvar conteúdo em um arquivo

@@ -9,26 +9,25 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
+# Initialize a Chrome WebDriver instance
 driver = webdriver.Chrome()
 
 class Instagram:
-    def __init__(self, username, password, username_for_scrape):
+    def __init__(self, username, password, username_for_scrape, timer_for_scrape):
         self.username = username
         self.password = password
         self.base_url = 'https://www.instagram.com'
         self.bot = driver
         self.username_for_scrape = username_for_scrape
+        self.timer_for_scrape = timer_for_scrape
         self.login()
-
-
     
     def createFilesJson(self):
+        # Create JSON files for followers, followings, iDontFollowBack, and dontFollowMeBack
         current_directory = os.path.dirname(os.path.abspath(__file__))
 
         input_file_name = "data.json"
         input_file_path = os.path.join(current_directory, input_file_name)
-
-
 
         output_file_name = self.username_for_scrape + "followers.json"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -41,9 +40,7 @@ class Instagram:
         with open(output_file_path, "w", encoding="utf-8") as json_file:
             json.dump(followers, json_file, indent=2, ensure_ascii=False)
             
-        print("Arquivo followers criado com sucesso")
-
-
+        print("File 'followers.json' created successfully")
 
         output_file_name = self.username_for_scrape + "followings.json"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -56,9 +53,7 @@ class Instagram:
         with open(output_file_path, "w", encoding="utf-8") as json_file:
             json.dump(following, json_file, indent=2, ensure_ascii=False)
             
-        print("Arquivo followings criado com sucesso")
-
-
+        print("File 'followings.json' created successfully")
 
         output_file_name = self.username_for_scrape + "iDontFollowBack.json"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -71,9 +66,7 @@ class Instagram:
         with open(output_file_path, "w", encoding="utf-8") as json_file:
             json.dump(i_dont_follow_back, json_file, indent=2, ensure_ascii=False)
             
-        print("Arquivo iDontFollowBack criado com sucesso")
-
-
+        print("File 'iDontFollowBack.json' created successfully")
 
         output_file_name = self.username_for_scrape + "dontFollowMeBack.json"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -86,21 +79,14 @@ class Instagram:
         with open(output_file_path, "w", encoding="utf-8") as json_file:
             json.dump(dont_follow_me_back, json_file, indent=2, ensure_ascii=False)
             
-        print("Arquivo dontFollowMeBack criado com sucesso")
-
-
-
-        print("O arquivo data.json contém todos os dados")
-
-
+        print("File 'dontFollowMeBack.json' created successfully")
 
     def createFilesTxt(self):
+        # Create text files for followers, followings, iDontFollowBack, and dontFollowMeBack
         current_directory = os.path.dirname(os.path.abspath(__file__))
 
         input_file_name = "data.json"
         input_file_path = os.path.join(current_directory, input_file_name)
-
-
 
         output_file_name = self.username_for_scrape + "followers.txt"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -115,9 +101,7 @@ class Instagram:
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-        print("Arquivo followers criado com sucesso")
-
-
+        print("File 'followers.txt' created successfully")
 
         output_file_name = self.username_for_scrape + "followings.txt"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -132,9 +116,7 @@ class Instagram:
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-        print("Arquivo followings criado com sucesso")
-
-
+        print("File 'followings.txt' created successfully")
 
         output_file_name = self.username_for_scrape + "iDontFollowBack.txt"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -149,9 +131,7 @@ class Instagram:
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-        print("Arquivo iDontFollowBack criado com sucesso")
-
-
+        print("File 'iDontFollowBack.txt' created successfully")
 
         output_file_name = self.username_for_scrape + "dontFollowMeBack.txt"
         output_file_path = os.path.join(current_directory, output_file_name)
@@ -166,9 +146,7 @@ class Instagram:
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-        print("Arquivo criado com sucesso")
-
-
+        print("File 'dontFollowMeBack.txt' created successfully")
 
         with open (input_file_path, "r", encoding="utf-8") as json_file:
             data = json.load(json_file)
@@ -178,59 +156,57 @@ class Instagram:
         output_file_path = os.path.join(current_directory, output_file_name)
         
         with open(output_file_path, "w", encoding="utf-8") as txt_file:
-            txt_file.write("Seguidores: \n")
+            txt_file.write("Followers: \n")
             for follower in data.get('data', {}).get('followers', []):
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-            txt_file.write("\nSeguindo: \n")
+            txt_file.write("\Followings: \n")
             for follower in data.get('data', {}).get('following', []):
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-            txt_file.write("\nNão sigo de volta: \n")
+            txt_file.write("\nIDontFollowBack: \n")
             for follower in data.get('data', {}).get('iDontFollowBack', []):
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
-            txt_file.write("\nNão me segue de volta: \n")
+            txt_file.write("\nDontFollowMeBack: \n")
             for follower in data.get('data', {}).get('dontFollowMeBack', []):
                 txt_file.write(str(follower) + "\n")
                 txt_file.write("\n")
                 
         os.remove(input_file_path)
-        print("Arquivo data.txt criado com sucesso")
+        print("File 'data.txt' created successfully")
 
-
-        
     def removeFiles(self):
+        # Remove all .json and .txt files from the current directory
         current_directory = os.path.dirname(os.path.abspath(__file__))
         
-        #remover todos os arquvios .json do diretorio
+        # Remove all .json files in the directory
         for file in os.listdir(current_directory):
             if file.endswith(".json"):
                 file_path = os.path.join(current_directory, file)
                 os.remove(file_path)
                 
+        # Remove all .txt files in the directory
         for file in os.listdir(current_directory):
             if file.endswith(".txt"):
                 file_path = os.path.join(current_directory, file)
                 os.remove(file_path)
-             
-        
+                     
     def selectData(self):     
         current_directory = os.path.dirname(os.path.abspath(__file__))
         
         script_file_path = os.path.join(current_directory, "script.js")
         
-        
-        print("Selecione o arquivo que deseja visualizar: ")
+        print("Select the file type to view: ")
         print("1 - JSON")
         print("2 - TXT")
-        print("0 - Sair")
+        print("0 - Quit")
 
         while True:
-            file_option = int(input("Digite a opção desejada: "))
+            file_option = int(input("Enter the desired option: "))
             
             if file_option == 0:
                 break
@@ -244,11 +220,10 @@ class Instagram:
                 break
             
             else:
-                print("Opção inválida")          
-
-
+                print("Invalid option")        
+                
         while True:
-            link_option = int(input("Deseja criar um arquivo com os links dos usuários? (1 - Sim / 2 - Não): "))
+            link_option = int(input("Create a file with user profile links? (1 - Yes / 2 - No): "))
 
             if link_option == 1:
                 if file_option == 1:
@@ -265,9 +240,8 @@ class Instagram:
                 break
 
             else:  
-                print("Opção inválida")
+                print("Invalid option")
             
-
         with open(script_file_path, "r") as js_file:
             js_code = js_file.read()
             js_code = js_code.replace(self.username_for_scrape, "cuardido")
@@ -275,10 +249,8 @@ class Instagram:
         with open(script_file_path, "w") as js_file:
             js_file.write(js_code)          
         
-                
-                
     def moveData(self):
-        # Especifique o caminho do arquivo original e o novo caminho de destino
+        # Specify the original file path and the new destination file path
         download_directory = os.path.join(os.path.expanduser("~"), "Downloads")
         current_directory = os.path.dirname(os.path.abspath(__file__))
         
@@ -288,11 +260,10 @@ class Instagram:
         output_file_name = "data.json"
         output_file_path = os.path.join(current_directory, output_file_name)
         
-        # Mova o arquivo para o novo caminho de destino
+        # Move the file to the new destination
         shutil.move(input_file_path, output_file_path)
         
         self.selectData()
-        
         
     def scrape(self):
         self.bot.get('https://www.instagram.com/' + self.username_for_scrape + '/')
@@ -310,13 +281,12 @@ class Instagram:
 
         self.bot.execute_script(js_code)
         
-        time.sleep(20)
+        time.sleep(self.timer_for_scrape)
 
-        #fechar o driver
+        # Close the WebDriver
         self.bot.close()
         
         self.moveData()
-        
         
     def login(self):
         self.bot.get(self.base_url)

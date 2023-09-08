@@ -44,8 +44,6 @@ class CreateLinksTxt:
 
         defaultLinksFuncionsToTxt(self.input_file_path, self.temp_file_path, self.base_url)
       
-
-
 class CreateLinksJson:
     def __init__(self, username_for_scrape):
         self.username_for_scrape = username_for_scrape

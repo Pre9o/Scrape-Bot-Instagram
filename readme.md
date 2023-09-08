@@ -6,7 +6,7 @@ This is a simple bot that scrapes Instagram followers and following. It uses a s
 ## How to use
 1. Clone this repository
 2. Install the dependencies with `pip install -r requirements.txt`
-3. Install ChromeDriver from [here](https://chromedriver.chromium.org/downloads)
+3. Install ChromeDriver from [here](https://chromedriver.chromium.org/downloads) and put it in the same folder as the script
 4. Run the script with `python main.py`
 5. Enter your Instagram username, password and the username of the account you want to scrape (your username and password are not saved anywhere, they are only used to log in to Instagram)
 6. Wait for the script to finish

@@ -14,7 +14,7 @@ def main():
         program_option = int(input("Enter your choice: "))
 
         if program_option == 0:
-            break
+            return
         elif program_option == 1:
             break
         elif program_option == 2:
